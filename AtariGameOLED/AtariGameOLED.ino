@@ -48,6 +48,7 @@
 #include <Adafruit_SSD1351.h>
 #include <SPI.h>
 
+//copied from AtariButton since need to be global var
 #define UP      A0
 #define DOWN    A1
 #define LEFT    A2
@@ -55,10 +56,18 @@
 #define BUTTON1 A4
 //#define BUTTON2 A5 //only for two-button controllers
 
+//extern tells us it is in another sketch
+//need to declare the functions here even though they are defined elsewhere
 extern void initButton(void);
 extern void buttonInput(void);
 extern char switchRead(uint8_t B, char pos);
 
+extern int keyInput(void);
+
+/*not sure if this should be here or not - am i wasting space by 
+duplicating an array that will update in both places?
+*/
+//char lastButtonState[] = {1,1,1,1,1,1};
 
 // Option 1: use any pins but a little slower
 //Adafruit_SSD1351 tft = Adafruit_SSD1351(cs, dc, mosi, sclk, rst);  
@@ -69,16 +78,12 @@ extern char switchRead(uint8_t B, char pos);
 // to use the microSD card (see the image drawing example)
 Adafruit_SSD1351 tft = Adafruit_SSD1351(cs, dc, rst);
 
+//why pi? why not
 float p = 3.1415926;
 
-void fillpixelbypixel(uint16_t color) {
-  for (uint8_t x=0; x < tft.width(); x++) {
-    for (uint8_t y=0; y < tft.height(); y++) {
-      tft.drawPixel(x, y, color);
-    }
-  }
-  delay(100);
-}
+//movement varibles are global
+int xmove = 0;
+int ymove = 0;
 
 void setup(void) {
   Serial.begin(115200);
@@ -86,14 +91,15 @@ void setup(void) {
   tft.begin();
 
   Serial.println("init");
-
-  uint16_t time = millis();
   tft.fillRect(0, 0, 128, 128, BLACK);
-  time = millis() - time;
   
+  uint16_t time = millis();
+  //use this for debounce reference
+  time = millis() - time;
   Serial.println(time, DEC);
   delay(500);
   
+  //this used to be the setup() when AtariButton was standalone
   initButton();
   
   tft.fillScreen(BLACK);
@@ -216,10 +222,6 @@ void gameSprites(){
   int moveDown = 0;
   ymove = ymove + moveUp + moveDown;
   
-  tft.setCursor(80,100);
-  tft.println(xmove);
-  tft.setCursor(90,100);
-  tft.println(ymove);
   
 //  Serial.println("moveRight");
 
@@ -230,23 +232,39 @@ void gameSprites(){
   tft.println("Pew pew pew!");
   
   //move the white dot
-  for(int i = 0; i < 10; i++){
+  for(int i = 0; i < 20; i++){
     moveUp = switchRead(UP, 1);
     moveDown = -1 * switchRead(DOWN, 2);
     moveRight = switchRead(RIGHT, 3);
     moveLeft = -1 * switchRead(LEFT, 4);
     
+    Serial.write('s');
+    int movetest = keyInput();
+   
     Serial.print(xmove);
     Serial.print(",");
     Serial.println(ymove);
-    
+   
     currentX+=xmove;
     currentY+=ymove;
 //    tft.fillScreen(BLACK);
+
+  tft.setTextColor(BLUE);
+  tft.setCursor(80,100);
+  tft.println(movetest);
+  tft.setCursor(90,100);
+  tft.println(moveDown);
+  
+//just checking that these update correctly
+      xmove++;
+//    moveRight++;
+//    moveDown++;
       
 //to do: set triangle x,y with button input from AtariButton
     tft.fillTriangle(42 + xmove, 20, 42 + xmove, 26, 50 + xmove, 23, RED);
-   
+    //fill in behind triangle as it moves
+//     tft.fillRect(38 + xmove, 20, 4, 8, BLACK);
+     
     tft.fillRect(currentX, currentY,currentW, currentH, WHITE);
     tft.fillRect(currentX, currentY,currentW, currentH, BLACK); //faster than drawing over entire screen
     delay(50);

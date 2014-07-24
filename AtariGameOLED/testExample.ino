@@ -1,3 +1,15 @@
+
+//looks like colorful snow
+void fillpixelbypixel(uint16_t color) {
+  for (uint8_t x=0; x < tft.width(); x++) {
+    for (uint8_t y=0; y < tft.height(); y++) {
+      tft.drawPixel(x, y, color);
+    }
+  }
+  delay(100);
+}
+
+
 void testlines(uint16_t color) {
    tft.fillScreen(BLACK);
    for (uint16_t x=0; x < tft.width()-1; x+=6) {
