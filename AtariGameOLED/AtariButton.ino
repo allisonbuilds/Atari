@@ -15,13 +15,9 @@
 //In switchRead(), [pos] refers to the position of the buttonstate in this array
 char lastButtonState[] = {1,1,1,1,1,1};
 
-<<<<<<< HEAD
+
 void initButton(void) {
-// Serial.begin(115200);
-=======
-void setup() {
- Serial.begin(115200);
->>>>>>> 161ca3c9c69c984268ad045d16c0353e64f4b704
+
 /*controller works as set of switches connected to ground
 so set pullup resistors on inputs so that power goes in 
 and you can read the power cut off as a button press*/
@@ -34,11 +30,9 @@ digitalWrite(BUTTON1, HIGH);
 //digitalWrite(A5, HIGH); //only for two-button controllers
 
 }
-<<<<<<< HEAD
+
 void buttonInput(void) {
-=======
-void loop() {
->>>>>>> 161ca3c9c69c984268ad045d16c0353e64f4b704
+
   // put your main code here, to run repeatedly:
   switchRead(UP, 0);
   switchRead(DOWN, 1);
@@ -47,12 +41,9 @@ void loop() {
   switchRead(BUTTON1, 4);
 }
 
-<<<<<<< HEAD
+
 char switchRead(uint8_t B, char pos){
-=======
-void switchRead(uint8_t B, char pos){
->>>>>>> 161ca3c9c69c984268ad045d16c0353e64f4b704
-  
+
   char buttonState = digitalRead(B);
   
    //if switch closed, do this
@@ -65,24 +56,17 @@ void switchRead(uint8_t B, char pos){
         //some say A0 - A5 are actually 14 - 19 but that code did not work
           Serial.print(B, DEC);
           Serial.println(" On");
-<<<<<<< HEAD
+
           return(1);
          }
       else if(buttonState == HIGH){
           Serial.println("Off");
           return(0);
-=======
-         }
-      else if(buttonState == HIGH){
-          Serial.println("Off");
->>>>>>> 161ca3c9c69c984268ad045d16c0353e64f4b704
+
          }
      } 
      
+   //last part of comparative code is always to make the last = current   
    lastButtonState[pos] = buttonState;
 }
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 161ca3c9c69c984268ad045d16c0353e64f4b704
