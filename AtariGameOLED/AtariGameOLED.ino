@@ -115,7 +115,7 @@ void setup(void) {
 void loop() {
 
  
-  tft.fillScreen(BLACK);
+//  tft.fillScreen(BLACK);
   
   gameSprites();
 
@@ -207,67 +207,20 @@ Game Code Begin
 */
 
 void gameSprites(){
-  int xmove = 0;
-  int ymove = 0;
-  int currentW = 10;
-  int currentH = 10;
-  int currentX = 50 + xmove;
-  int currentY = 50 + ymove;
-  
-  int moveRight = 0;
-  int moveLeft = 0;
-  xmove = xmove + moveRight + moveLeft;
-  
-  int moveUp = 0;
-  int moveDown = 0;
-  ymove = ymove + moveUp + moveDown;
-  
-  
-//  Serial.println("moveRight");
-
-  //"sound effects"
-  tft.setCursor(tft.width()/15, tft.height()/15);
-  tft.setTextColor(WHITE);
-  tft.setTextSize(1);
-  tft.println("Pew pew pew!");
-  
-  //move the white dot
-  for(int i = 0; i < 20; i++){
+    char moveUp, moveDown, moveLeft, moveRight;
+    
     moveUp = switchRead(UP, 1);
     moveDown = -1 * switchRead(DOWN, 2);
     moveRight = switchRead(RIGHT, 3);
     moveLeft = -1 * switchRead(LEFT, 4);
     
-    Serial.write('s');
-    int movetest = keyInput();
+//    Serial.write('s');
+//    int movetest = keyInput();
    
+    xmove = xmove + moveDown + moveUp;
+    ymove = ymove + moveLeft + moveRight;
     Serial.print(xmove);
     Serial.print(",");
     Serial.println(ymove);
-   
-    currentX+=xmove;
-    currentY+=ymove;
-//    tft.fillScreen(BLACK);
-
-  tft.setTextColor(BLUE);
-  tft.setCursor(80,100);
-  tft.println(movetest);
-  tft.setCursor(90,100);
-  tft.println(moveDown);
-  
-//just checking that these update correctly
-      xmove++;
-//    moveRight++;
-//    moveDown++;
-      
-//to do: set triangle x,y with button input from AtariButton
-    tft.fillTriangle(42 + xmove, 20, 42 + xmove, 26, 50 + xmove, 23, RED);
-    //fill in behind triangle as it moves
-//     tft.fillRect(38 + xmove, 20, 4, 8, BLACK);
-     
-    tft.fillRect(currentX, currentY,currentW, currentH, WHITE);
-    tft.fillRect(currentX, currentY,currentW, currentH, BLACK); //faster than drawing over entire screen
-    delay(50);
-  }
-  delay(500);
+ 
 }
